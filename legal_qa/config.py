@@ -26,7 +26,7 @@ class Settings:
     llm_base_url: str = os.getenv("LLM_BASE_URL", "https://api.groq.com/openai/v1")
     llm_api_key: str = os.getenv("LLM_API_KEY") or os.getenv("GROQ_API_KEY", "")
     llm_models: tuple[str, ...] = tuple(
-        m.strip() for m in os.getenv("LLM_MODELS", "openai/gpt-oss-120b,openai/gpt-oss-20b").split(",") if m.strip()
+        m.strip() for m in os.getenv("LLM_MODELS", "openai/gpt-oss-120b,qwen/qwen3.8-27b").split(",") if m.strip()
     )
     max_question_chars: int = 500
 

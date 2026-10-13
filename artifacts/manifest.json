@@ -1,0 +1,46 @@
+{
+  "embed_model": "BAAI/bge-m3",
+  "dim": 1024,
+  "num_chunks": 233,
+  "max_chunk_chars": 1800,
+  "built_at": "2026-10-13T13:15:52.095963+00:00",
+  "documents": [
+    {
+      "file": "blld_2019_ocr_raw.docx",
+      "so_hieu": "45/2019/QH14",
+      "articles": 220,
+      "expected": 220,
+      "missing": [],
+      "duplicates": [],
+      "chunks": 233,
+      "warnings": [],
+      "cleaning": {
+        "counts": {
+          "xóa dòng rác / header / số trang": 43,
+          "chuẩn hóa tiêu đề Điều": 4,
+          "sửa dấu khoản 'i.' → '1.'": 1,
+          "sửa cụm 'tối thiếu'": 6,
+          "sửa cụm 'tổng sổ người'": 1,
+          "nối dòng bị ngắt": 1666
+        },
+        "removed_samples": [
+          "2",
+          "8",
+          "10",
+          "12",
+          "14",
+          "16",
+          "18",
+          "20",
+          "22",
+          "24",
+          "26",
+          "28",
+          "30",
+          "32",
+          "34"
+        ]
+      }
+    }
+  ]
+}
