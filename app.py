@@ -1,14 +1,23 @@
 """Giao diện Gradio. Hugging Face Spaces tự chạy file này."""
-import logging
 try:
-    import spaces  # noqa: F401
+    import spaces  # noqa: F401  # phải import trước torch
 except ImportError:
     spaces = None  # chạy local không có package này
+
+import logging
 import gradio as gr
 
 from legal_qa.rag import RAGPipeline
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+logging.getLogger("httpx").setLevel(logging.WARNING)  # bớt log HTTP request
+
+# ZeroGPU cần ít nhất 1 hàm @spaces.GPU; hàm này không bao giờ được gọi nên không tốn quota
+if spaces is not None:
+    @spaces.GPU(duration=1)
+    def _zerogpu_placeholder():
+        pass
+
 pipeline = RAGPipeline()
 
 
@@ -30,4 +39,4 @@ demo = gr.ChatInterface(
 )
 
 if __name__ == "__main__":
-    demo.queue(default_concurrency_limit=2).launch()
+    demo.queue(default_concurrency_limit=2).launch(ssr_mode=False)
