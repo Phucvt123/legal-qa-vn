@@ -1,69 +1,30 @@
+"""Giao diện Gradio. Hugging Face Spaces tự chạy file này."""
+import logging
+
 import gradio as gr
-from huggingface_hub import InferenceClient
+
+from legal_qa.rag import RAGPipeline
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+pipeline = RAGPipeline()
 
 
-def respond(
-    message,
-    history: list[dict[str, str]],
-    system_message,
-    max_tokens,
-    temperature,
-    top_p,
-    hf_token: gr.OAuthToken,
-):
-    """
-    For more information on `huggingface_hub` Inference API support, please check the docs: https://huggingface.co/docs/huggingface_hub/v0.22.2/en/guides/inference
-    """
-    client = InferenceClient(token=hf_token.token, model="openai/gpt-oss-20b")
-
-    messages = [{"role": "system", "content": system_message}]
-
-    messages.extend(history)
-
-    messages.append({"role": "user", "content": message})
-
-    response = ""
-
-    for message in client.chat_completion(
-        messages,
-        max_tokens=max_tokens,
-        stream=True,
-        temperature=temperature,
-        top_p=top_p,
-    ):
-        choices = message.choices
-        token = ""
-        if len(choices) and choices[0].delta.content:
-            token = choices[0].delta.content
-
-        response += token
-        yield response
+def respond(message, history):
+    # Mỗi câu hỏi tra cứu độc lập (không dùng lịch sử chat)
+    yield from pipeline.stream_answer(message)
 
 
-"""
-For information on how to customize the ChatInterface, peruse the gradio docs: https://www.gradio.app/docs/chatinterface
-"""
-chatbot = gr.ChatInterface(
-    respond,
-    additional_inputs=[
-        gr.Textbox(value="You are a friendly Chatbot.", label="System message"),
-        gr.Slider(minimum=1, maximum=2048, value=512, step=1, label="Max new tokens"),
-        gr.Slider(minimum=0.1, maximum=4.0, value=0.7, step=0.1, label="Temperature"),
-        gr.Slider(
-            minimum=0.1,
-            maximum=1.0,
-            value=0.95,
-            step=0.05,
-            label="Top-p (nucleus sampling)",
-        ),
-    ],
+demo = gr.ChatInterface(
+    fn=respond,
+    title="⚖️ Trợ lý tra cứu Bộ luật Lao động 2019",
+    description=("Hỏi đáp có trích dẫn điều luật (45/2019/QH14). Mỗi câu hỏi được tra cứu độc lập. "
+                 "Thông tin chỉ mang tính tham khảo, không thay thế tư vấn pháp lý."),
+    examples=["Vợ sinh con được nghỉ mấy tháng?",
+              "Thử việc tối đa bao lâu?",
+              "Muốn nghỉ việc phải báo trước mấy ngày?",
+              "Công ty có được giữ bằng gốc của nhân viên không?"],
+    cache_examples=False,  # không tự chạy ví dụ lúc build để khỏi tốn quota
 )
 
-with gr.Blocks() as demo:
-    with gr.Sidebar():
-        gr.LoginButton()
-    chatbot.render()
-
-
 if __name__ == "__main__":
-    demo.launch()
+    demo.queue(default_concurrency_limit=2).launch()
