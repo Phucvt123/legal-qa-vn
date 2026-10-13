@@ -32,7 +32,7 @@ class Retriever:
             model = SentenceTransformer(settings.embed_model, device=device)
             model.max_seq_length = 512
             logger.info("Đã load %s trên %s, %d chunks", settings.embed_model, device, len(self.chunks))
-        self.model = model
+        self.model = SentenceTransformer(settings.embed_model, device="cpu")
 
     def search(self, query: str, k: int | None = None, only_active: bool = True) -> list[dict]:
         k = k or settings.top_k
