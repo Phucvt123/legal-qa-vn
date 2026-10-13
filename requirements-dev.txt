@@ -1,0 +1,7 @@
+-r requirements.txt
+gradio
+python-docx
+pymupdf
+pytesseract
+Pillow
+pytest

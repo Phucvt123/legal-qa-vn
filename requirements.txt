@@ -1,0 +1,6 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+sentence-transformers>=3.0
+openai>=1.40
+numpy
+python-dotenv

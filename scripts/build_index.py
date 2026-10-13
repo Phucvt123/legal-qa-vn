@@ -83,7 +83,7 @@ def main() -> None:
     print(f"Văn bản sau làm sạch để soát lỗi: {debug_dir}")
 
     if failed and args.strict:
-        sys.exit("❌ Parse chưa đạt (--strict). Sửa file gốc hoặc data/ocr_fixes.csv rồi chạy lại.")
+        sys.exit("Parse chưa đạt (--strict). Sửa file gốc hoặc data/ocr_fixes.csv rồi chạy lại.")
     if args.skip_embed:
         return
 
@@ -109,7 +109,7 @@ def main() -> None:
         "built_at": datetime.now(timezone.utc).isoformat(),
         "documents": doc_reports,
     }, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"✅ Đã lưu index vào {out}")
+    print(f"Đã lưu index vào {out}")
 
 
 if __name__ == "__main__":

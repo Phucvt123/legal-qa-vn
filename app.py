@@ -16,7 +16,7 @@ def respond(message, history):
 
 demo = gr.ChatInterface(
     fn=respond,
-    title="⚖️ Trợ lý tra cứu Bộ luật Lao động 2019",
+    title="Trợ lý tra cứu Bộ luật Lao động 2019",
     description=("Hỏi đáp có trích dẫn điều luật (45/2019/QH14). Mỗi câu hỏi được tra cứu độc lập. "
                  "Thông tin chỉ mang tính tham khảo, không thay thế tư vấn pháp lý."),
     examples=["Vợ sinh con được nghỉ mấy tháng?",
