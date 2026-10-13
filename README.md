@@ -1,5 +1,5 @@
 ---
-title: Gradio Chatbot
+title: RAG
 emoji: 💬
 colorFrom: yellow
 colorTo: purple
