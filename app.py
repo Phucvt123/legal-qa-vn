@@ -1,6 +1,9 @@
 """Giao diện Gradio. Hugging Face Spaces tự chạy file này."""
 import logging
-
+try:
+    import spaces  # noqa: F401
+except ImportError:
+    spaces = None  # chạy local không có package này
 import gradio as gr
 
 from legal_qa.rag import RAGPipeline
