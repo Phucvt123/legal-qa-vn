@@ -48,7 +48,7 @@ def main() -> None:
     for row in rows:
         path = settings.data_dir / "raw" / row["file"]
         if not path.exists():
-            sys.exit(f"❌ Thiếu file {path}")
+            sys.exit(f"Thiếu file {path}")
 
         raw = load_text(path)
         cleaned, clean_report = clean_text(raw, fixes)
