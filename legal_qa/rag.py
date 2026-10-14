@@ -36,7 +36,7 @@ class RAGPipeline:
         unknown = sorted(cited - {h["article"] for h in hits})
         if unknown:  # LLM nhắc tới Điều không có trong ngữ cảnh: dấu hiệu bịa
             logger.warning("Trích dẫn ngoài ngữ cảnh: %s", unknown)
-            lines.append(f"\n⚠️ Câu trả lời có nhắc Điều {', '.join(unknown)} nhưng các điều này "
+            lines.append(f"\nCâu trả lời có nhắc Điều {', '.join(unknown)} nhưng các điều này "
                          "không nằm trong dữ liệu đã tra cứu, hãy đối chiếu văn bản gốc.")
         return f"\n\n---\n**{title}:**\n" + "\n".join(lines)
 
