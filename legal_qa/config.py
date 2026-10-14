@@ -29,6 +29,12 @@ class Settings:
         m.strip() for m in os.getenv("LLM_MODELS", "openai/gpt-oss-120b,qwen/qwen3.8-27b").split(",") if m.strip()
     )
     max_question_chars: int = 500
-
+    vector_store: str = os.getenv("VECTOR_STORE", "qdrant")
+    qdrant_collection: str = os.getenv("QDRANT_COLLECTION", "legal_vn")
+    # Có QDRANT_URL thì kết nối server hoặc Cloud; để trống thì chạy local mode
+    qdrant_url: str = os.getenv("QDRANT_URL", "")
+    qdrant_api_key: str = os.getenv("QDRANT_API_KEY", "")
+    # Local mode: ":memory:" (mặc định, hợp với HF Spaces) hoặc đường dẫn thư mục
+    qdrant_path: str = os.getenv("QDRANT_PATH", ":memory:")
 
 settings = Settings()
