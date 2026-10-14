@@ -47,4 +47,4 @@ class Retriever:
 
     def search(self, query: str, k: int | None = None, only_active: bool = True,
                so_hieu: str | None = None) -> list[Hit]:
-        return self.store.search(self.encode(query), k or settings.top_k, only_active, so_hieu)
+        return self.store.search(self.encode(query), k or getattr(settings, "top_k", 5), only_active, so_hieu)

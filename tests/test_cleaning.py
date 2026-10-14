@@ -44,3 +44,13 @@ def test_phrase_fix_with_digits_rejected(tmp_path):
     p.write_text("wrong,right\n8 tháng,6 tháng\n", encoding="utf-8")
     with pytest.raises(ValueError):
         load_phrase_fixes(p)
+def test_ocr_dien_heading():
+    out, _ = clean_text("Điền 194. Thời hiệu yêu cầu giải quyết\n1. Thời hiệu là 06 tháng.")
+    assert out.splitlines()[0] == "Điều 194. Thời hiệu yêu cầu giải quyết"
+    assert "06 tháng" in out  # chữ số giữ nguyên
+
+
+def test_reference_not_treated_as_heading():
+    line = "Điều 35 của Bộ luật này quy định quyền đơn phương chấm dứt."
+    out, _ = clean_text(line)
+    assert out == line

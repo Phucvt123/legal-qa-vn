@@ -130,12 +130,24 @@ class QdrantStore(VectorStore):
 
 
 # ---------------------------------------------------------------- factory
+def _active_status(settings) -> str:
+    """Lấy giá trị 'còn hiệu lực' từ Settings, hoặc từ hằng ACTIVE_STATUS trong config.py."""
+    value = getattr(settings, "active_status", None)
+    if value:
+        return value
+    from legal_qa import config
+    return getattr(config, "ACTIVE_STATUS", "con_hieu_luc")
+
+
 def build_store(chunks: list[dict], vectors: np.ndarray, settings) -> VectorStore:
-    kind = settings.vector_store.lower()
+    kind = settings.vector_store.strip().lower()
+    active = _active_status(settings)
     if kind == "numpy":
-        return NumpyStore(chunks, vectors, settings.active_status)
+        return NumpyStore(chunks, vectors, active)
     if kind == "qdrant":
-        return QdrantStore(chunks, vectors, settings.active_status,
-                           collection=settings.qdrant_collection, url=settings.qdrant_url,
-                           api_key=settings.qdrant_api_key, path=settings.qdrant_path)
+        return QdrantStore(chunks, vectors, active,
+                           collection=settings.qdrant_collection.strip(),
+                           url=settings.qdrant_url.strip(),
+                           api_key=settings.qdrant_api_key.strip(),
+                           path=settings.qdrant_path.strip())
     raise ValueError(f"VECTOR_STORE không hợp lệ: {settings.vector_store!r} (dùng 'qdrant' hoặc 'numpy')")

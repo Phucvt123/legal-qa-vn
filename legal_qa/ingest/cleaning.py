@@ -28,8 +28,8 @@ REPEAT_THRESHOLD = 8  # dòng ngắn lặp >= 8 lần: thường là header/foot
 
 RE_PAGE_NUMBER = re.compile(r"^(?:Trang\s*)?\d{1,3}(?:\s*/\s*\d{1,3})?$", re.IGNORECASE)
 RE_DIEU_OCR = re.compile(
-    r"^(?:Điền|Điêu|Điểu|Điếu|Diều|Dieu|Ðiều|Đỉều)\s+(\d+[a-z]?)\s*([\.:])",
-    re.MULTILINE,
+    r"^(?:Điều|Điền|Điêu|Điểu|Điếu|Điẻu|Đỉều|Diều|Dieu)\s+"
+    r"(?P<num>\d+[a-z]?)\s*(?P<punct>[.:,])?\s*"
 )
 RE_CHUONG_OCR = re.compile(r"^C\s?h\s?[uư]\s?[oơ]\s?n\s?g\s+(?P<num>[IVXLCl1]+)\b\s*[.:]?\s*")
 RE_INLINE_KHOAN1 = re.compile(r"\s+[il1]\.\s+")
