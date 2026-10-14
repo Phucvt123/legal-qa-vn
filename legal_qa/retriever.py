@@ -46,5 +46,8 @@ class Retriever:
         return self.model.encode([query], normalize_embeddings=True)[0]
 
     def search(self, query: str, k: int | None = None, only_active: bool = True,
-               so_hieu: str | None = None) -> list[Hit]:
-        return self.store.search(self.encode(query), k or getattr(settings, "top_k", 5), only_active, so_hieu)
+               so_hieu: str | None = None) -> list[dict]:
+        """Trả về list chunk dạng dict (kèm key 'score'), giống kiểu của retriever cũ."""
+        hits = self.store.search(self.encode(query), k or getattr(settings, "top_k", 5),
+                                 only_active, so_hieu)
+        return [{**chunk, "score": score} for chunk, score in hits]

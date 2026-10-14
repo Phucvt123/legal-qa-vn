@@ -49,3 +49,20 @@ def test_payload_has_no_internal_fields():
     chunks, v, rng = _data()
     hit, _ = QdrantStore(chunks, v, ACTIVE, collection="t_payload").search(_query(rng, v.shape[1]), 1)[0]
     assert "index_version" not in hit and hit["text"].startswith("chunk")
+def test_retriever_returns_dicts(tmp_path, monkeypatch):
+    import json
+    from legal_qa import retriever as R
+
+    chunks, v, rng = _data(n=10)
+    (tmp_path / "chunks.json").write_text(json.dumps(chunks), encoding="utf-8")
+    np.save(tmp_path / "embeddings.npy", v)
+    (tmp_path / "manifest.json").write_text(
+        json.dumps({"embed_model": R.settings.embed_model}), encoding="utf-8")
+
+    class FakeModel:
+        max_seq_length = 0
+        def encode(self, texts, normalize_embeddings=True):
+            return np.array([_query(rng, v.shape[1])])
+
+    hits = R.Retriever(tmp_path, model=FakeModel()).search("câu hỏi", k=3)
+    assert isinstance(hits[0], dict) and "status" in hits[0] and "score" in hits[0]
